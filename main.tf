@@ -52,6 +52,10 @@ resource "aws_instance" "this" {
     }
   }
 
+ provisioner "local-exec" {
+    command = "sed -i 's/   broker.id=0/broker.id=${count.index == null ? 0 : count.index + 1}/g' config/server.properties"
+  }
+
   dynamic "ephemeral_block_device" {
     for_each = var.ephemeral_block_device
     content {
